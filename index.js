@@ -12,7 +12,7 @@ async function insertarDatos() {
     const { data, error } = await supabase
         .from('estudiantes') 
         .insert([
-            { Nombre: 'Erick Solis', Carrera: 'IaySI' } 
+            { Nombre: 'Erick Solis', Carrera: 'IAySI' } 
         ])
         .select()
 
@@ -23,6 +23,5 @@ async function insertarDatos() {
         // Si sale este mensaje, ¡ya terminaste!
         console.log('¡Registro insertado con éxito!:', data)
     }
-}
-
+} 
 insertarDatos()
