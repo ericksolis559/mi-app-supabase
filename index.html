@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro FIME - Supabase</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background-color: #f4f4f4; }
+        form { display: flex; flex-direction: column; width: 320px; gap: 12px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #mensaje { margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Registro de Estudiantes (FIME)</h2>
+    <form id="registroForm">
+        <input type="text" id="nombreInput" placeholder="Nombre completo" required>
+        <input type="text" id="carreraInput" placeholder="Matrícula o Carrera" required>
+        <button type="submit">Enviar a Supabase</button>
+    </form>
+    <p id="mensaje"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuración de tu proyecto (estos datos ya los tienes)
+        const supabaseUrl = 'https://vtuouryruhjlymqaklvy.supabase.co';
+        const supabaseKey = 'sb_publishable_ziSrnKzziBc8C_pP_lbl-g_ZGZ6SyID'; // Tu clave anon
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const form = document.getElementById('registroForm');
+        const mensajeP = document.getElementById('mensaje');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            mensajeP.innerText = "Enviando...";
+
+            const nombreVal = document.getElementById('nombreInput').value;
+            const carreraVal = document.getElementById('carreraInput').value;
+
+            // Inserción en la tabla con las mayúsculas correctas
+            const { data, error } = await _supabase
+                .from('estudiantes')
+                .insert([
+                    { Nombre: nombreVal, Carrera: carreraVal }
+                ]);
+
+            if (error) {
+                mensajeP.style.color = "red";
+                mensajeP.innerText = "Error: " + error.message;
+            } else {
+                mensajeP.style.color = "green";
+                mensajeP.innerText = "¡Datos guardados con éxito en la nube!";
+                form.reset();
+            }
+        });
+    </script>
+</body>
+</html>
